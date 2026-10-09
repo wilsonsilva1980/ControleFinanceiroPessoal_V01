@@ -1,0 +1,118 @@
+@ControleFinanceiro.API_HostAddress = http://localhost:5105
+
+GET {{ControleFinanceiro.API_HostAddress}}/openapi/v1.json
+Accept: application/json
+
+###
+
+GET {{ControleFinanceiro.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+### Get an anti-forgery token
+# @name csrf
+GET {{ControleFinanceiro.API_HostAddress}}/api/auth/csrf-token
+Accept: application/json
+
+### Sign in using credentials provisioned outside source control
+POST {{ControleFinanceiro.API_HostAddress}}/api/auth/sign-in
+Content-Type: application/json
+X-CSRF-TOKEN: {{csrf.response.body.requestToken}}
+
+{
+	"userName": "<owner-username>",
+	"password": "<owner-password>"
+}
+
+### Sign out
+POST {{ControleFinanceiro.API_HostAddress}}/api/auth/sign-out
+X-CSRF-TOKEN: {{csrf.response.body.requestToken}}
+
+### List debts
+GET {{ControleFinanceiro.API_HostAddress}}/api/Debts
+Accept: application/json
+
+### Create a debt and its installments
+POST {{ControleFinanceiro.API_HostAddress}}/api/Debts
+Content-Type: application/json
+X-CSRF-TOKEN: {{csrf.response.body.requestToken}}
+
+{
+	"description": "Example debt",
+	"dueDate": "2026-12-10T00:00:00Z",
+	"originalAmount": 1200.00,
+	"creditLimit": null,
+	"installments": [
+		{ "dueDate": "2026-10-10T00:00:00Z", "scheduledAmount": 100.00 },
+		{ "dueDate": "2026-11-10T00:00:00Z", "scheduledAmount": 100.00 }
+	]
+}
+
+### Mark an installment as paid
+PUT {{ControleFinanceiro.API_HostAddress}}/api/Debts/installments/1/payment
+Content-Type: application/json
+X-CSRF-TOKEN: {{csrf.response.body.requestToken}}
+
+{
+	"status": "Pago",
+	"paymentDate": "2026-10-10T00:00:00Z"
+}
+
+### Record an early payment
+POST {{ControleFinanceiro.API_HostAddress}}/api/Debts/1/early-payments
+Content-Type: application/json
+X-CSRF-TOKEN: {{csrf.response.body.requestToken}}
+
+{
+	"paymentDate": "2026-09-27T00:00:00Z",
+	"amount": 50.00
+}
+
+### Get a monthly debt summary
+GET {{ControleFinanceiro.API_HostAddress}}/api/Debts/summary/monthly?year=2026&month=10
+Accept: application/json
+
+### Get a yearly debt summary
+GET {{ControleFinanceiro.API_HostAddress}}/api/Debts/summary/yearly?year=2026
+Accept: application/json
+
+### List bank accounts with identifiers masked
+GET {{ControleFinanceiro.API_HostAddress}}/api/BankAccounts
+Accept: application/json
+
+### Create a bank account
+POST {{ControleFinanceiro.API_HostAddress}}/api/BankAccounts
+Content-Type: application/json
+X-CSRF-TOKEN: {{csrf.response.body.requestToken}}
+
+{
+	"bankName": "Example Bank",
+	"accountName": "Household",
+	"accountType": "Checking",
+	"branchIdentifier": "0000",
+	"accountIdentifier": "00000000",
+	"balance": 0,
+	"overdraftUsed": 0,
+	"overdraftLimit": 0
+}
+
+### List credit cards
+GET {{ControleFinanceiro.API_HostAddress}}/api/CreditCards
+Accept: application/json
+
+### Create a credit card without card credentials
+POST {{ControleFinanceiro.API_HostAddress}}/api/CreditCards
+Content-Type: application/json
+X-CSRF-TOKEN: {{csrf.response.body.requestToken}}
+
+{
+	"issuer": "Example Issuer",
+	"displayName": "Daily card",
+	"purchaseLimit": 0,
+	"localCashWithdrawalLimit": 0,
+	"internationalCashWithdrawalLimit": 0,
+	"creditPixEnabled": false,
+	"billPaymentEnabled": false,
+	"dueDay": 10
+}

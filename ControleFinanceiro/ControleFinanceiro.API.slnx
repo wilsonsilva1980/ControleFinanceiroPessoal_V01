@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ControleFinanceiro.API/ControleFinanceiro.API.csproj" />
+  <Project Path="ControleFinanceiro.Migrations/ControleFinanceiro.Migrations.csproj" />
+  <Project Path="ControleFinanceiro.DebtWorkbookImport/ControleFinanceiro.DebtWorkbookImport.csproj" />
+  <Project Path="ControleFinanceiro.Tests/ControleFinanceiro.Tests.csproj" />
+</Solution>

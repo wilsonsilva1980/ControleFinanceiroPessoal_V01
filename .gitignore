@@ -1,0 +1,28 @@
+# .NET build output
+**/bin/
+**/obj/
+**/.vs/
+*.user
+*.suo
+
+# Node.js and frontend build output
+**/node_modules/
+**/dist/
+**/dist-ssr/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+secrets.json
+
+# IDE and operating system files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
